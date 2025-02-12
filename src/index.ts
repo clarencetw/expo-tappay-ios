@@ -2,4 +2,4 @@
 // and on native platforms to ExpoTappayModule.ts
 export { default } from './ExpoTappayModule';
 export { default as ExpoTappayView } from './ExpoTappayView';
-export * from  './ExpoTappay.types';
+export * from './ExpoTappay.types';

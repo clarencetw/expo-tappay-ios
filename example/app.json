@@ -15,16 +15,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "expo.modules.tappayios.example"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "expo.modules.tappayios.example"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }
