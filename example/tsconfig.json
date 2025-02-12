@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-tappay-ios": ["../src/index"],
+      "expo-tappay-ios/*": ["../src/*"]
+    }
+  }
+}

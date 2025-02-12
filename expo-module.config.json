@@ -1,0 +1,17 @@
+{
+  "platforms": [
+    "apple",
+    "android",
+    "web"
+  ],
+  "apple": {
+    "modules": [
+      "ExpoTappayModule"
+    ]
+  },
+  "android": {
+    "modules": [
+      "expo.modules.tappayios.ExpoTappayModule"
+    ]
+  }
+}
