@@ -1,48 +1,88 @@
 import ExpoModulesCore
+import TPDirect
 
-public class ExpoTappayModule: Module {
+let APPLE_PAY_START_EVENT_NAME = "onApplePayStart"
+let APPLE_PAY_CANCEL_EVENT_NAME = "onApplePayCancel"
+let APPLE_PAY_SUCCESS_EVENT_NAME = "onApplePaySuccess"
+let APPLE_PAY_RECEIVE_PRIME_EVENT_NAME = "onReceivePrime"
+let APPLE_PAY_FAILED_EVENT_NAME = "onApplePayFailed"
+let APPLE_PAY_FINISH_EVENT_NAME = "onApplePayFinished"
+
+public class ExpoTappayModule: Module  {
   // Each module class must implement the definition function. The definition consists of components
   // that describes the module's functionality and behavior.
   // See https://docs.expo.dev/modules/module-api for more details about available components.
   public func definition() -> ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoTappay')` in JavaScript.
     Name("ExpoTappay")
-
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
+      
+    Events(APPLE_PAY_START_EVENT_NAME)
+    Events(APPLE_PAY_CANCEL_EVENT_NAME)
+    Events(APPLE_PAY_SUCCESS_EVENT_NAME)
+    Events(APPLE_PAY_RECEIVE_PRIME_EVENT_NAME)
+    Events(APPLE_PAY_FAILED_EVENT_NAME)
+    Events(APPLE_PAY_FINISH_EVENT_NAME)
+        
+    var applePay: TPDApplePay!
+    let merchant: TPDMerchant = TPDMerchant()
+    let consumer: TPDConsumer = TPDConsumer()
+    var cart: TPDCart = TPDCart()
+    let networks = (Bundle.main.object(forInfoDictionaryKey: "TPDApplePayPaymentNetworks") as? [String] ?? ["Visa", "MasterCard", "JCB"]).map { PKPaymentNetwork(rawValue: $0) }
+      
+    Function("isApplePayAvailable") { () -> Bool in
+        return TPDApplePay.canMakePayments()
     }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of the
-    // view definition: Prop, Events.
-    View(ExpoTappayView.self) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { (view: ExpoTappayView, url: URL) in
-        if view.webView.url != url {
-          view.webView.load(URLRequest(url: url))
+      
+    Function("setupMerchant") { (name: String, merchantCapability: String, merchantId: String, countryCode: String, currencyCode: String) in
+        merchant.merchantName = name
+        
+        // Merchant Capacility
+        switch merchantCapability {
+        case "debit":
+            merchant.merchantCapability = .debit
+        case "credit":
+            merchant.merchantCapability = .credit
+        case "emv":
+            merchant.merchantCapability = .emv
+        default:
+            merchant.merchantCapability = .threeDSecure
         }
-      }
-
-      Events("onLoad")
+        
+        // Merchant Identifier
+        merchant.applePayMerchantIdentifier = merchantId
+        
+        // Country Code & Currency Code
+        merchant.countryCode = countryCode
+        merchant.currencyCode = currencyCode
+        
+        // Merchant Support Networks
+        merchant.supportedNetworks = networks
+    }
+      
+    Function("clearCart") {
+        cart = TPDCart()
+    }
+      
+    Function("addToCart") { (name: String, amount: Int) in
+        let amountValue = NSDecimalNumber(value: amount)
+        cart.add(TPDPaymentItem(itemName: name, withAmount: amountValue))
+    }
+      
+    AsyncFunction("startPayment") { (promise: Promise) in
+        let applePayDelegate = ApplePayDelegate() { (name: String, body: [String: Any?]) -> Void in
+            debugPrint(name)
+            self.sendEvent(name, body)
+        }
+        applePay = TPDApplePay.setupWthMerchant(merchant, with: consumer, with: cart, withDelegate: applePayDelegate)
+        
+        applePay.startPayment()
+    }
+      
+    Function("showSetup") {
+      TPDApplePay.showSetupView()
+    }
+      
+    Function("showResult") { (isSuccess: Bool) in
+      applePay.showPaymentResult(isSuccess)
     }
   }
 }

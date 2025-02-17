@@ -11,13 +11,13 @@ Pod::Spec.new do |s|
   s.author         = package['author']
   s.homepage       = package['homepage']
   s.source         = { git: 'https://github.com/clarencetw/expo-tappay-ios' }
-  s.platforms      = {
-    :ios => '15.1'
-  }
+  
+  s.platforms      = { :ios => '15.1' }
   s.swift_version  = '5.4'
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'
+  s.frameworks = 'SafariServices'
 
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
