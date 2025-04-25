@@ -14,6 +14,8 @@ This module is a wrapper around the [iOS Tappay SDK](https://github.com/TapPay/t
 
 A React Native module for integrating TapPay payment services in iOS applications.
 
+This project is inspired by ![expo-tappay-apple-pay](https://github.com/stanma9107/expo-tappay-apple-pay), which provides an Expo-compatible implementation of TapPay with Apple Pay integration.
+
 ## Features
 
 - Apple Pay integration
@@ -101,6 +103,8 @@ expoTappay.addReceivePrimeListener((event) => {
 # 中文版
 
 [Tappay](https://www.tappaysdk.com/en) 是一個優秀的支付服務提供商，提供多種流行的支付方式。
+
+本專案受到 ![expo-tappay-apple-pay](https://github.com/stanma9107/expo-tappay-apple-pay) 的啟發，該專案提供與 Expo 相容的 TapPay 與 Apple Pay 整合實作。
 
 <img src="https://bingo.d.pr/8To8My.png" width="180">
 
