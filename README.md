@@ -1,5 +1,15 @@
 # expo-tappay-ios
 
+> ⚠️ **This project has achieved its initial purpose and is no longer maintained**  
+> For continuous updates or deeper integration, please refer to the following projects:  
+> - [TapPay/tappay-ios-example](https://github.com/TapPay/tappay-ios-example)
+> - [stanma9107/expo-tappay-apple-pay](https://github.com/stanma9107/expo-tappay-apple-pay)
+>
+> ⚠️ **本專案已達最初目的，不再維護**  
+> 如需持續更新或深入整合，請參考以下專案：  
+> - [TapPay/tappay-ios-example](https://github.com/TapPay/tappay-ios-example)
+> - [stanma9107/expo-tappay-apple-pay](https://github.com/stanma9107/expo-tappay-apple-pay)
+
 TapPay SDK for iOS
 
 [Tappay](https://www.tappaysdk.com/en) is a great payment service provider which provide many popular payment method.
